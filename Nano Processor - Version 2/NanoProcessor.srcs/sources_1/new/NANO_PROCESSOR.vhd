@@ -35,7 +35,10 @@ entity NANO_PROCESSOR is
     Port ( Clk : in STD_LOGIC;
            Reset : in STD_LOGIC;
            Display : out STD_LOGIC_VECTOR (3 downto 0);
-           Flags : out STD_LOGIC_VECTOR( 3 downto 0));
+           Flags : out STD_LOGIC_VECTOR( 3 downto 0);
+           Comp_equal : out STD_LOGIC;      
+           Comp_greater : out STD_LOGIC;     
+           Comp_lesser : out STD_LOGIC);
 end NANO_PROCESSOR;
 
 architecture Behavioral of NANO_PROCESSOR is
@@ -61,9 +64,13 @@ component ALU
           A : in std_logic_vector (3 downto 0);
           B : in std_logic_vector (3 downto 0);
           Flag_EN : in std_logic;
+          Comp_EN : in std_logic;
           Selector : in std_logic_vector (2 downto 0);
           Y : out std_logic_vector (3 downto 0);
-          Flag_Reg : out STD_LOGIC_VECTOR (3 downto 0)
+          Flag_Reg : out STD_LOGIC_VECTOR (3 downto 0);
+          equal : out STD_LOGIC;      
+          greater : out STD_LOGIC;     
+          lesser : out STD_LOGIC
           );         
 end component;
 
@@ -90,6 +97,7 @@ component INSTRUCTION_DECODER
            Load_Sele : out STD_LOGIC;
            Reg_EN : out STD_LOGIC_VECTOR (2 downto 0);
            Flag_EN : out STD_LOGIC;
+           Comp_EN : out STD_LOGIC;
            Jump_Flag : out STD_LOGIC;
            Address_to_Jump : out STD_LOGIC_VECTOR (2 downto 0));
 end component;
@@ -126,7 +134,7 @@ component MUX_8way_4bit
            Output : out STD_LOGIC_VECTOR (3 downto 0));
 end component;
 
-signal Load_sele, Jump_Flag, Flag_EN_ALU : std_logic;
+signal Load_sele, Jump_Flag, Flag_EN_ALU, Comp_EN_ALU : std_logic;
 
 signal Mem_Selector, Output_2_3bit_MUX ,Address_to_Jump, Output_3bit_Adder : std_logic_vector(2 downto 0);
 signal Selector_8_4bit_MUX_1, Selector_8_4bit_MUX_2, Reg_EN: std_logic_vector(2 downto 0);
@@ -170,6 +178,7 @@ begin
             Load_Sele => Load_sele,
             Reg_EN => Reg_EN,
             Flag_EN => Flag_EN_ALU,
+            Comp_EN => Comp_EN_ALU,
             Jump_Flag => Jump_Flag,
             Address_to_Jump => Address_to_Jump);
 
@@ -228,10 +237,14 @@ begin
             B => Output_8_4bit_MUX_2,
             Selector => Func,
             Flag_EN => Flag_EN_ALU,
+            Comp_EN => Comp_EN_ALU,
             Y => ALU_Output,
-            Flag_Reg => Flag_Reg); 
-            
-           
+            Flag_Reg => Flag_Reg, 
+            equal => Comp_equal,
+            greater => Comp_greater, 
+            lesser => Comp_lesser); 
+         
+                  
      Adder_3_bit : ADDER_3bit 
         Port map (
             A => Mem_Selector,

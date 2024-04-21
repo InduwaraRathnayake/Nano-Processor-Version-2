@@ -36,13 +36,26 @@ entity ALU is
           A : in std_logic_vector (3 downto 0);
           B : in std_logic_vector (3 downto 0);
           Flag_EN : in std_logic;
+          Comp_EN : in std_logic;
           Selector : in std_logic_vector (2 downto 0);
           Y : out std_logic_vector (3 downto 0);
-          Flag_Reg : out STD_LOGIC_VECTOR (3 downto 0)
+          Flag_Reg : out STD_LOGIC_VECTOR (3 downto 0);
+          equal : out STD_LOGIC;      
+          greater : out STD_LOGIC;     
+          lesser : out STD_LOGIC
           );         
 end ALU;
 
 architecture Behavioral of ALU is
+
+component Comp_4_bit is
+    Port ( num1 : in STD_LOGIC_VECTOR(3 downto 0);
+           num2 : in STD_LOGIC_VECTOR(3 downto 0);
+           EN : in STD_LOGIC;
+           equal : out STD_LOGIC;      
+           greater : out STD_LOGIC;     
+           lesser : out STD_LOGIC );   
+end component;
 
 component MUX_2way_4bit 
     Port ( A : in STD_LOGIC_VECTOR (3 downto 0);
@@ -123,6 +136,16 @@ begin
             Selector => Selector(1 downto 0),
             Output => Mux_2_out
          );
+         
+     Comparator : Comp_4_bit
+        port map(
+            num1 => A,
+            num2=>B,
+            EN => Comp_EN,
+            equal => equal,     
+            greater => greater,  
+            lesser => lesser);  
+            
 
 Flag_Reg(0) <= Flags(0) AND Flag_EN;
 Flag_Reg(1) <= Flags(1) AND Flag_EN;

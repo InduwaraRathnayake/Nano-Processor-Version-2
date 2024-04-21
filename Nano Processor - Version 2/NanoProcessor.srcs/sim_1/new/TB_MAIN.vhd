@@ -38,19 +38,21 @@ end TB_MAIN;
 architecture Behavioral of TB_MAIN is
 
 component MAIN 
-    Port ( Clk : in STD_LOGIC;
-           Reset : in STD_LOGIC;
-           Dis_LED : out STD_LOGIC_VECTOR (3 downto 0);
-           Dis_7Seg : out STD_LOGIC_VECTOR (6 downto 0);
-           Flags : out STD_LOGIC_VECTOR (3 downto 0);
-           AnodeSelector : out STD_LOGIC_VECTOR (3 downto 0)
-           );
+        Port (  Clk : in STD_LOGIC;
+                Reset : in STD_LOGIC;
+                Dis_LED : out STD_LOGIC_VECTOR (3 downto 0);
+                Dis_7Seg : out STD_LOGIC_VECTOR (6 downto 0);
+                Flags : out STD_LOGIC_VECTOR (3 downto 0);
+                Comparator_out : out STD_LOGIC_VECTOR (2 downto 0);
+                AnodeSelector : out STD_LOGIC_VECTOR (3 downto 0)
+              );
 end component;
 
 signal Clk : std_logic := '0';
 signal Reset : std_logic;
 signal Dis_LED, Flags, AnodeSelector : std_logic_vector (3 downto 0); 
 signal Dis_7Seg : std_logic_vector (6 downto 0);
+signal Comparator_out : std_logic_vector (2 downto 0);
  
 begin
     UUT : MAIN 
@@ -59,6 +61,7 @@ begin
             Reset => Reset,
             Dis_LED => Dis_LED,
             Dis_7Seg => Dis_7Seg,
+            Comparator_out => Comparator_out,
             Flags => Flags,
             AnodeSelector => AnodeSelector
          );
@@ -73,6 +76,9 @@ process begin
     wait for 100 ns;
     
     Reset <= '0';
+    wait for 2000ns;
+    
+    Reset <= '1';
     wait;
 end process;       
 

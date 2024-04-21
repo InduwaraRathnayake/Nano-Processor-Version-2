@@ -41,6 +41,7 @@ entity INSTRUCTION_DECODER is
            Load_Sele : out STD_LOGIC;
            Reg_EN : out STD_LOGIC_VECTOR (2 downto 0);
            Flag_EN : out STD_LOGIC; -- Enable the Flags in ALU
+           Comp_EN : out STD_LOGIC; -- Enable the Comparator in ALU
            Jump_Flag : out STD_LOGIC;
            Address_to_Jump : out STD_LOGIC_VECTOR (2 downto 0));
 end INSTRUCTION_DECODER;
@@ -56,15 +57,17 @@ begin
     process (Operator, Instruction_Bus, Reg_Check_Jump) begin
         Jump_Flag <= '0';
         Flag_EN <= '0';
+        Comp_EN <= '0';
         Load_Sele <= '0';
         Reg_Sele1 <= "000"; 
         Reg_Sele2 <= "000";
         Immediate_Value <= "0000";
-        Reg_EN <= "110"; -- Enable the dummy register
+        Reg_EN <= "000";
         Address_to_Jump <= "000";
         FuncValue <= Instruction_Bus(2 downto 0); 
                      
         if Operator = "00" then 
+            Comp_EN <= '1';
             Reg_Sele1 <= Instruction_Bus(9 downto 7);
             Reg_Sele2 <= Instruction_Bus(6 downto 4);            
             Reg_EN <= Instruction_Bus(9 downto 7);
@@ -74,7 +77,7 @@ begin
             end if;
          
         elsif Operator = "01" then 
-
+            Comp_EN <= '1';
             Reg_EN <= Instruction_Bus(9 downto 7);
             Flag_EN <= '1';
             Reg_Sele2 <= Instruction_Bus(9 downto 7);

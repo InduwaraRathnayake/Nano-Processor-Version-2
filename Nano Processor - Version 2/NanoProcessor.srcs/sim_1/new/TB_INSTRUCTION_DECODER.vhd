@@ -40,12 +40,14 @@ architecture Behavioral of TB_INSTRUCTION_DECODER is
 component INSTRUCTION_DECODER
     Port ( Instruction_Bus : in STD_LOGIC_VECTOR (11 downto 0);
            Reg_Check_Jump : in STD_LOGIC_VECTOR (3 downto 0);
-           Add_Sub_Sele : out STD_LOGIC;
            Reg_Sele1 : out STD_LOGIC_VECTOR (2 downto 0);
            Reg_Sele2 : out STD_LOGIC_VECTOR (2 downto 0);
            Immediate_Value : out STD_LOGIC_VECTOR (3 downto 0);
+           Func : out STD_LOGIC_VECTOR (2 downto 0);
            Load_Sele : out STD_LOGIC;
            Reg_EN : out STD_LOGIC_VECTOR (2 downto 0);
+           Flag_EN : out STD_LOGIC; -- Enable the Flags in ALU
+           Comp_EN : out STD_LOGIC; -- Enable the Comparator in ALU           
            Jump_Flag : out STD_LOGIC;
            Address_to_Jump : out STD_LOGIC_VECTOR (2 downto 0));
 end component;
@@ -53,13 +55,14 @@ end component;
 signal Instruction_Bus : STD_LOGIC_VECTOR (11 downto 0);
 signal Reg_Check_Jump, Immediate_Value : STD_LOGIC_VECTOR (3 downto 0);
 signal Reg_Sele1, Reg_Sele2, Reg_EN, Address_to_Jump : STD_LOGIC_VECTOR (2 downto 0);
-signal Add_Sub_Sele, Load_Sele, Jump_Flag : STD_LOGIC;
+signal Flag_EN,Comp_EN, Load_Sele, Jump_Flag : STD_LOGIC;
 
 begin
 UUT : INSTRUCTION_DECODER port map(
         Instruction_Bus => Instruction_Bus,
         Reg_Check_Jump => Reg_Check_Jump,
-        Add_Sub_Sele => Add_Sub_Sele,
+        Flag_EN => Flag_EN,
+        Comp_EN => Comp_EN,
         Reg_Sele1 => Reg_Sele1,
         Reg_Sele2 => Reg_Sele2,
         Immediate_Value => Immediate_Value,
@@ -72,7 +75,7 @@ UUT : INSTRUCTION_DECODER port map(
         
 stimulus_process: process
      begin
- 
+     
      Instruction_Bus <= "101110000011";  
      wait for 100 ns;
  
@@ -84,7 +87,7 @@ stimulus_process: process
  
      Instruction_Bus <= "010010000000";  
      wait for 100 ns;
- 
+      
      Instruction_Bus <= "000100010010";  
      wait for 100 ns;
  
@@ -97,9 +100,6 @@ stimulus_process: process
 
      Reg_Check_Jump <= "0010";
      wait for 100 ns;             
- 
-     Instruction_Bus <= "000000000000";  
-     wait;
      
      end process stimulus_process;
      

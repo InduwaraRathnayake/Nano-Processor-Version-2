@@ -37,17 +37,28 @@ entity MAIN is
            Dis_LED : out STD_LOGIC_VECTOR (3 downto 0);
            Dis_7Seg : out STD_LOGIC_VECTOR (6 downto 0);
            Flags : out STD_LOGIC_VECTOR (3 downto 0);
+           Comparator_out : out STD_LOGIC_VECTOR (2 downto 0);
            AnodeSelector : out STD_LOGIC_VECTOR (3 downto 0)
           );
 end MAIN;
 
 architecture Behavioral of MAIN is
 
+--component NANO_PROCESSOR is
+--    Port ( Clk : in STD_LOGIC;
+--           Reset : in STD_LOGIC;
+--           Display : out STD_LOGIC_VECTOR (3 downto 0);
+--           Flags : out STD_LOGIC_VECTOR( 3 downto 0));
+--end component;
+
 component NANO_PROCESSOR is
     Port ( Clk : in STD_LOGIC;
            Reset : in STD_LOGIC;
            Display : out STD_LOGIC_VECTOR (3 downto 0);
-           Flags : out STD_LOGIC_VECTOR( 3 downto 0));
+           Flags : out STD_LOGIC_VECTOR( 3 downto 0);
+           Comp_equal : out STD_LOGIC;      
+           Comp_greater : out STD_LOGIC;     
+           Comp_lesser : out STD_LOGIC);
 end component;
 
 component LUT_16_7 is
@@ -75,8 +86,12 @@ begin
              Clk => SlowClk_out,
              Reset => Reset,
              Display => Display_out,
-             Flags => Flags            
+             Flags => Flags,
+             Comp_equal => Comparator_out(0),     
+             Comp_greater => Comparator_out(1),     
+             Comp_lesser => Comparator_out(2)             
           );
+              
           
     LUT : LUT_16_7
         port map(
