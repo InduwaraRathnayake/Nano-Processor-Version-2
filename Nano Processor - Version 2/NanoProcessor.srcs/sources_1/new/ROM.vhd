@@ -73,7 +73,7 @@ signal prosseser_ROM : rom_type := (
 --        "000000000000", 
 --        "000000000000"
 
---        process => (-1) ANDN 5 = (-6)        
+     --   process => (-1) ANDN 5 = (-6)        
 --        "101110001111", -- MOVI R7,-1     R7 <- -1
 --        "100010000101", -- MOVI R1,5      R1 <- 5
 --        "001110010100", -- ANDN R7,R1     R7 <- R7 AND NOT(R1)

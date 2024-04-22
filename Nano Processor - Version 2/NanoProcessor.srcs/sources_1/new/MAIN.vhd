@@ -44,13 +44,6 @@ end MAIN;
 
 architecture Behavioral of MAIN is
 
---component NANO_PROCESSOR is
---    Port ( Clk : in STD_LOGIC;
---           Reset : in STD_LOGIC;
---           Display : out STD_LOGIC_VECTOR (3 downto 0);
---           Flags : out STD_LOGIC_VECTOR( 3 downto 0));
---end component;
-
 component NANO_PROCESSOR is
     Port ( Clk : in STD_LOGIC;
            Reset : in STD_LOGIC;

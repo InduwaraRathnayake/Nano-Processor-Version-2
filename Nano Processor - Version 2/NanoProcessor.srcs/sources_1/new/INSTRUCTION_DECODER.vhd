@@ -54,7 +54,7 @@ signal FuncValue : std_logic_vector (2 downto 0);
 begin
     Operator <= Instruction_Bus(11 downto 10);
     
-    process (Operator, Instruction_Bus, Reg_Check_Jump) begin
+    process (Operator, Instruction_Bus, Reg_Check_Jump,FuncValue) begin
         Jump_Flag <= '0';
         Flag_EN <= '0';
         Comp_EN <= '0';

@@ -76,7 +76,7 @@ process begin
     wait for 100 ns;
     
     Reset <= '0';
-    wait for 2000ns;
+    wait for 2000 ns;
     
     Reset <= '1';
     wait;
